@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أداة صيد يوزرات إنستجرام | أسامة ليث</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+        
+        body {
+            background-color: #0c0c0c;
+            color: #fff;
+            line-height: 1.6;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+        
+        .terminal {
+            background-color: #000;
+            border: 2px solid #8A2BE2;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px auto;
+            max-width: 1000px;
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
+        }
+        
+        .header {
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #8A2BE2;
+        }
+        
+        .header h1 {
+            color: #8A2BE2;
+            font-size: 24px;
+            text-shadow: 0 0 5px #8A2BE2;
+        }
+        
+        .header p {
+            color: #FF0000;
+            font-size: 16px;
+        }
+        
+        .channels {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .channel-btn {
+            display: flex;
+            align-items: center;
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 8px 15px;
+            border: 1px solid #8A2BE2;
+            border-radius: 3px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .channel-btn:hover {
+            background-color: #8A2BE2;
+        }
+        
+        .channel-btn i {
+            margin-left: 5px;
+        }
+        
+        .logs-container {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .log-box {
+            flex: 1;
+            background-color: #1a1a1a;
+            border: 1px solid #8A2BE2;
+            border-radius: 3px;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+        }
+        
+        .log-title {
+            text-align: center;
+            color: #FF0000;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #8A2BE2;
+        }
+        
+        .log-content {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .log-content ul {
+            list-style-type: none;
+        }
+        
+        .log-content li {
+            padding: 3px 5px;
+            margin: 3px 0;
+            border-radius: 2px;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .control-btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 3px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .start-btn {
+            background-color: #008800;
+            color: #fff;
+        }
+        
+        .start-btn:hover {
+            background-color: #00aa00;
+        }
+        
+        .stop-btn {
+            background-color: #880000;
+            color: #fff;
+        }
+        
+        .stop-btn:hover {
+            background-color: #aa0000;
+        }
+        
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .status {
+            background-color: #1a1a1a;
+            border: 1px solid #8A2BE2;
+            border-radius: 3px;
+            padding: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #8A2BE2;
+            color: #8A2BE2;
+        }
+        
+        /* أنماط النص الملونة */
+        .good {
+            color: #00ff00;
+        }
+        
+        .bad {
+            color: #ff0000;
+        }
+        
+        .info {
+            color: #8A2BE2;
+        }
+        
+        .warning {
+            color: #ffff00;
+        }
+        
+        /* شريط التمرير المخصص */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #8A2BE2;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6a1cb9;
+        }
+        
+        @media (max-width: 768px) {
+            .logs-container {
+                flex-direction: column;
+            }
+            
+            .log-box {
+                height: 200px;
+            }
+            
+            .channels, .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <div class="header">
+            <h1>أداة صيد يوزرات إنستجرام</h1>
+            <p>أداة متقدمة للبحث عن يوزرات إنستجرام المتاحة - إعداد أسامة ليث</p>
+        </div>
+        
+        <div class="channels">
+            <a href="https://t.me/QEQQ6" class="channel-btn" target="_blank">
+                <i class="fab fa-telegram-plane"></i> قناة التليكرام
+            </a>
+            <a href="https://t.me/QNQQ8" class="channel-btn" target="_blank">
+                <i class="fab fa-telegram-plane"></i> حساب المبرمج
+            </a>
+        </div>
+        
+        <div class="logs-container">
+            <div class="log-box">
+                <div class="log-title">اليوزرات غير المتاحة</div>
+                <div id="unavailable-usernames" class="log-content">
+                    <ul></ul>
+                </div>
+            </div>
+            
+            <div class="log-box">
+                <div class="log-title">اليوزرات المتاحة</div>
+                <div id="available-usernames" class="log-content">
+                    <ul></ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="start-btn" class="control-btn start-btn">بدء الصيد</button>
+            <button id="stop-btn" class="control-btn stop-btn" disabled>إيقاف الصيد</button>
+        </div>
+        
+        <div id="status" class="status">
+            <span class="info">جاهز للبدء...</span>
+        </div>
+        
+        <div class="footer">
+            <p>تم التصميم والبرمجة بواسطة أسامة ليث &copy; 2023</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const startBtn = document.getElementById('start-btn');
+            const stopBtn = document.getElementById('stop-btn');
+            const statusDiv = document.getElementById('status');
+            const availableList = document.getElementById('available-usernames').querySelector('ul');
+            const unavailableList = document.getElementById('unavailable-usernames').querySelector('ul');
+            
+            let isRunning = false;
+            let workers = [];
+            
+            // دالة محاكاة للطلب إلى إنستجرام بنمط مشابه للأداة الأصلية
+            function mockCheckUser() {
+                const chars = 'qwertyuioplkjhgfdsazxcvbnm_1234567890';
+                const username = Array.from({length: 6}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+                
+                // محاكاة استجابة عشوائية (نسبة النجاح 10%)
+                const isAvailable = Math.random() > 0.9;
+                
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve({ username, isAvailable });
+                    }, 500 + Math.random() * 1000);
+                });
+            }
+            
+            // دالة لفحص اسم المستخدم
+            async function checkUser() {
+                if (!isRunning) return;
+                
+                try {
+                    const result = await mockCheckUser();
+                    
+                    if (result.isAvailable) {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<span class="good">${result.username}</span> => GOOD user : ${result.username}`;
+                        availableList.appendChild(li);
+                        statusDiv.innerHTML = `<span class="good">تم العثور على يوزر متاح: ${result.username}</span>`;
+                    } else {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<span class="bad">${result.username}</span> => BAD user : ${result.username}`;
+                        unavailableList.appendChild(li);
+                        statusDiv.innerHTML = `<span class="info">جاري الصيد... تم فحص: ${result.username}</span>`;
+                    }
+                    
+                    // استمرارية الصيد
+                    if (isRunning) {
+                        setTimeout(checkUser, 100);
+                    }
+                } catch (error) {
+                    console.error('Error checking username:', error);
+                    statusDiv.innerHTML = `<span class="bad">خطأ: ${error.message}</span>`;
+                    
+                    if (isRunning) {
+                        setTimeout(checkUser, 1000);
+                    }
+                }
+            }
+            
+            // بدء الصيد
+            startBtn.addEventListener('click', function() {
+                isRunning = true;
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                statusDiv.innerHTML = '<span class="warning">جاري بدء الصيد...</span>';
+                
+                // بدء عدة عمليات صيد
+                for (let i = 0; i < 3; i++) {
+                    workers.push(setTimeout(checkUser, i * 200));
+                }
+            });
+            
+            // إيقاف الصيد
+            stopBtn.addEventListener('click', function() {
+                isRunning = false;
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+                statusDiv.innerHTML = '<span class="info">تم إيقاف الصيد</span>';
+                
+                // إيقاف جميع العمال
+                workers.forEach(worker => clearTimeout(worker));
+                workers = [];
+            });
+        });
+    </script>
+</body>
+</html>
