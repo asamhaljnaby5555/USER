@@ -284,7 +284,7 @@
             // دالة محاكاة للطلب إلى إنستجرام بنمط مشابه للأداة الأصلية
             function mockCheckUser() {
                 const chars = 'qwertyuioplkjhgfdsazxcvbnm_1234567890';
-                const username = Array.from({length: 6}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+                const username = Array.from({length: 5}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
                 
                 // محاكاة استجابة عشوائية (نسبة النجاح 10%)
                 const isAvailable = Math.random() > 0.9;
